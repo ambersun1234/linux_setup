@@ -5,6 +5,7 @@
 
 # Load config file
 source ./config.sh
+source ./opencv.sh
 
 # Setup output color
 RED='\033[31m'
@@ -97,3 +98,6 @@ config_vimrc
 
 # config git
 config_git
+
+# opencv
+opencv

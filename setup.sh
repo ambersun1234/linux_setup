@@ -5,99 +5,90 @@
 
 # Load config file
 source ./config.sh
-source ./opencv.sh
-
-# Setup output color
-RED='\033[31m'
-GREEN='\033[32m'
-NC='\033[0m'
-
-# Function part
-config_vimrc() {
-    cd ~
-	echo -e "checking .vimrc status"
-    if [ ! -s .vimrc ]; then
-        # if .vimrc is empty
-		touch .vimrc
-        echo ":set nu\n:set ai\n:set cursorline\n:set tabstop=4\n:set shiftwidth=4" >> .vimrc
-		echo -e "${GREEN}.vimrc set up successfully${NC}"
-	else
-		echo -e "${GREEN}.vimrc already set up${NC}"
-    fi
-}
- 
-config_git() {
-	declare -a arr=( "git config --global user.email \"${git_email}\""
-			"git config --global user.name \"${git_username}\""
-			"git config --global color.ui true"
-			"git config --global core.editor vim"
-			"git config --global alias.co commit"
-			"git config --global alias.su status"
-			"git config --global alias.lg \"log --color --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --\"" )
-
-	okay=0
-	for (( i=0 ; i < ${#arr[@]} ; i++ )); do
-		# check input empty or not
-		if [[ ( ${i} -eq 0 && ${git_email} == "" ) || ( ${i} -eq 1 && ${git_username} == "" ) ]]; then
-			echo -en "${RED}config.sh - "
-			
-			if [ ${i} -eq 0 ]; then
-				echo -n "email "
-			else
-				echo -n "username "
-			fi
-
-			echo -e "empty${NC}"
-			continue
-
-		# execute failed
-		elif ! eval "${arr[$i]}"; then
-			okay=1
-			echo -e "${RED}error: ${arr[$i]}${NC}"
-
-		# output execute command
-		else
-			echo ${arr[$i]}	
-		fi
-	done
-
-	# check whether execute successfully or not
-	if [ ${okay} -eq 0 ]; then
-		echo -e "${GREEN}git config execute successfully${NC}"
-	else
-		echo -e "${RED}git config execute failed${NC}"
-	fi
-}
-
+source ./__opencv.sh
+source ./__vimrc.sh
+source ./__git.sh
 
 # Main body of scripts starts here
+
+# write current datetime to log.txt
+currentTime=$(date +'%Y-%m-%d %H:%M:%S')
+echo -e "\n\n---------------setup.sh start: ${currentTime}" &>> log.txt
+
 # apt update
-if apt update; then
-    echo -e "${GREEN}apt update successfully${NC}"
+echo "apt:"
+if [ ${apt} == "YES" ]; then
+    if apt update &>> log.txt; then
+        echo -e "\t${GREEN}apt update successfully${NC}"
+    else
+        echo -e "\t${RED}apt update failed${NC}"
+    fi
 else
-    echo -e "${RED}$output${NC}"
-    echo -e "${RED}apt update failed: $output${NC}"
+    echo -e "\t${YELLOW}disable apt update${NC}"
 fi
 
 # apt-get update
-if apt-get update; then
-    echo -e "${GREEN}apt-get update successfully${NC}"
+echo -e "\napt-get:"
+if [ ${apt_get} == "YES" ]; then
+    if apt-get update &>> log.txt; then
+        echo -e "\t${GREEN}apt-get update successfully${NC}"
+    else
+        echo -e "\t${RED}apt-get update failed${NC}"
+    fi
 else
-    echo -e "${RED}apt-get update failed${NC}"
+    echo -e "\t${YELLOW}disable apt-get update${NC}"
 fi
 
 # install essential package
-if apt install vim git htop curl -y; then
-    echo -e "${GREEN}package( vim , git , htop , curl ) install successfully${NC}"
+echo -e "\nessential package( vim , git , htop , build-essential , cmake , automake ):"
+if [ ${package} == "YES" ]; then
+    if apt install vim git htop build-essential cmake automake -y &>> log.txt; then
+        declare -a checkingList=( [0]="vim" [1]="git" [2]="htop" [3]="build-essential" [4]="cmake" [5]="automake" )
+        okay=true
+
+        for i in ${!checkingList[@]}; do
+            check=$(apt-cache policy ${checkingList[$i]} | grep Installed | cut -c14- )
+
+            if [[ -z ${check} ]]; then
+                echo -e "\t${RED}${checkingList[$i]} install failed${NC}";
+                okay=false
+            else
+                echo -e "\t${GREEN}${checkingList[$i]} installed successfully${NC}"
+            fi
+        done
+
+        if [ ${okay} == true ]; then
+            echo -e "\n\t${GREEN}package install successfully${NC}"
+        else
+            echo -e "\n\t${RED}package install failed${NC}"
+        fi
+    else
+        echo -e "\t${RED}package install failed${NC}"
+    fi
 else
-    echo -e "${RED}package( vim , git , htop , curl ) install failed${NC}"
+    echo -e "\t${YELLOW}disable package install${NC}"
 fi
 
 # config .vimrc file
-config_vimrc
+echo -e "\n.vimrc:"
+if [ ${vimrc} == "YES" ]; then
+    __config_vimrc
+else
+    echo -e "\t${YELLOW}disable .vimrc config${NC}"
+fi
 
 # config git
-config_git
+echo -e "\ngit:"
+if [ ${git} == "YES" ]; then
+    __config_git
+else
+    echo -e "\t${YELLOW}disable git config${NC}"
+fi
 
 # opencv
-opencv
+echo -e "\nopencv:"
+if [ ${opencv} == "YES" ]; then
+    __config_opencv
+else
+    echo -e "\t${YELLOW}disable opencv install${NC}"
+fi

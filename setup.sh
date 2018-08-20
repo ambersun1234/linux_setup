@@ -16,7 +16,7 @@ currentTime=$(date +'%Y-%m-%d %H:%M:%S')
 echo -e "\n\n---------------setup.sh start: ${currentTime}" &>> log.txt
 
 # apt update
-echo "apt:"
+echo -e "apt: config.sh = ${PURPLE}${apt}${NC}"
 if [ ${apt} == "YES" ]; then
     if apt update &>> log.txt; then
         echo -e "\t${GREEN}apt update successfully${NC}"
@@ -28,7 +28,7 @@ else
 fi
 
 # apt-get update
-echo -e "\napt-get:"
+echo -e "\napt-get: config.sh = ${PURPLE}${apt-get}${NC}"
 if [ ${apt_get} == "YES" ]; then
     if apt-get update &>> log.txt; then
         echo -e "\t${GREEN}apt-get update successfully${NC}"
@@ -40,7 +40,7 @@ else
 fi
 
 # install essential package
-echo -e "\nessential package( vim , git , htop , build-essential , cmake , automake ):"
+echo -e "\nessential package( vim , git , htop , build-essential , cmake , automake ): config.sh = ${PURPLE}${package}${NC}"
 if [ ${package} == "YES" ]; then
     if apt install vim git htop build-essential cmake automake -y &>> log.txt; then
         declare -a checkingList=( [0]="vim" [1]="git" [2]="htop" [3]="build-essential" [4]="cmake" [5]="automake" )
@@ -70,7 +70,7 @@ else
 fi
 
 # config .vimrc file
-echo -e "\n.vimrc:"
+echo -e "\n.vimrc: config.sh = ${PURPLE}${vimrc}${NC}"
 if [ ${vimrc} == "YES" ]; then
     __config_vimrc
 else
@@ -78,7 +78,7 @@ else
 fi
 
 # config git
-echo -e "\ngit:"
+echo -e "\ngit: config.sh = ${PURPLE}${git}${NC}"
 if [ ${git} == "YES" ]; then
     __config_git
 else
@@ -86,7 +86,7 @@ else
 fi
 
 # opencv
-echo -e "\nopencv:"
+echo -e "\nopencv: config.sh = ${PURPLE}${opencv}${NC}"
 if [ ${opencv} == "YES" ]; then
     __config_opencv
 else

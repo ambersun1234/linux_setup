@@ -13,12 +13,12 @@ source ./__git.sh
 
 # write current datetime to log.txt
 currentTime=$(date +'%Y-%m-%d %H:%M:%S')
-echo -e "\n\n---------------setup.sh start: ${currentTime}" &>> log.txt
+echo -e "\n\n---------------setup.sh start: ${currentTime}" &>> ${WORKING_DIR}/log.txt
 
 # apt update
 echo -e "apt: config.sh = ${PURPLE}${apt}${NC}"
 if [ ${apt} == "YES" ]; then
-    if apt update &>> log.txt; then
+    if apt update &>> ${WORKING_DIR}/log.txt; then
         echo -e "\t${GREEN}apt update successfully${NC}"
     else
         echo -e "\t${RED}apt update failed${NC}"
@@ -30,7 +30,7 @@ fi
 # apt-get update
 echo -e "\napt-get: config.sh = ${PURPLE}${apt-get}${NC}"
 if [ ${apt_get} == "YES" ]; then
-    if apt-get update &>> log.txt; then
+    if apt-get update &>> ${WORKING_DIR}/log.txt; then
         echo -e "\t${GREEN}apt-get update successfully${NC}"
     else
         echo -e "\t${RED}apt-get update failed${NC}"
@@ -42,7 +42,7 @@ fi
 # install essential package
 echo -e "\nessential package( vim , git , htop , build-essential , cmake , automake ): config.sh = ${PURPLE}${package}${NC}"
 if [ ${package} == "YES" ]; then
-    if apt install vim git htop build-essential cmake automake -y &>> log.txt; then
+    if apt install vim git htop build-essential cmake automake -y &>> ${WORKING_DIR}/log.txt; then
         declare -a checkingList=( [0]="vim" [1]="git" [2]="htop" [3]="build-essential" [4]="cmake" [5]="automake" )
         okay=true
 

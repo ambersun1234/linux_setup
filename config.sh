@@ -3,6 +3,12 @@ GREEN='\033[32m'
 YELLOW='\033[33m'
 NC='\033[0m'
 PURPLE='\033[0;35m'
+WORKING_DIR=$(pwd)
+cd ~
+HOME=$(pwd)
+cd ${WORKING_DIR}
+
+# ------------ modify from here
 
 # Apt config
 apt="NO"
@@ -22,4 +28,4 @@ git_username="SECRET"
 vimrc="NO"
 
 # opencv
-opencv="NO"
+opencv="YES"

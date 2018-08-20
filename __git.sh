@@ -31,6 +31,8 @@ __config_git() {
 		elif ! eval "${arr[$i]}"; then
 			okay=1
 			echo -e "\t${RED}error: ${arr[$i]}${NC}"
+		else
+			echo ${arr[$i]} &>> ${WORKING_DIR}/log.txt
 		fi
 	done
 

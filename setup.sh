@@ -6,6 +6,7 @@
 # Load config file
 source ./config.sh
 source ./__opencv.sh
+source ./__lamp.sh
 source ./__vimrc.sh
 source ./__git.sh
 
@@ -16,6 +17,7 @@ currentTime=$(date +'%Y-%m-%d %H:%M:%S')
 echo -e "\n\n---------------setup.sh start: ${currentTime}" &>> ${WORKING_DIR}/log.txt
 
 # apt update
+cd ${WORKING_DIR}
 echo -e "apt: config.sh = ${PURPLE}${apt}${NC}"
 if [ ${apt} == "YES" ]; then
     if apt update &>> ${WORKING_DIR}/log.txt; then
@@ -28,6 +30,7 @@ else
 fi
 
 # apt-get update
+cd ${WORKING_DIR}
 echo -e "\napt-get: config.sh = ${PURPLE}${apt-get}${NC}"
 if [ ${apt_get} == "YES" ]; then
     if apt-get update &>> ${WORKING_DIR}/log.txt; then
@@ -40,6 +43,7 @@ else
 fi
 
 # install essential package
+cd ${WORKING_DIR}
 echo -e "\nessential package( vim , git , htop , build-essential , cmake , automake ): config.sh = ${PURPLE}${package}${NC}"
 if [ ${package} == "YES" ]; then
     if apt install vim git htop build-essential cmake automake -y &>> ${WORKING_DIR}/log.txt; then
@@ -70,6 +74,7 @@ else
 fi
 
 # config .vimrc file
+cd ${WORKING_DIR}
 echo -e "\n.vimrc: config.sh = ${PURPLE}${vimrc}${NC}"
 if [ ${vimrc} == "YES" ]; then
     __config_vimrc
@@ -78,6 +83,7 @@ else
 fi
 
 # config git
+cd ${WORKING_DIR}
 echo -e "\ngit: config.sh = ${PURPLE}${git}${NC}"
 if [ ${git} == "YES" ]; then
     __config_git
@@ -86,9 +92,19 @@ else
 fi
 
 # opencv
+cd ${WORKING_DIR}
 echo -e "\nopencv: config.sh = ${PURPLE}${opencv}${NC}"
 if [ ${opencv} == "YES" ]; then
     __config_opencv
 else
     echo -e "\t${YELLOW}disable opencv install${NC}"
+fi
+
+# lamp-server
+cd ${WORKING_DIR}
+echo -e "\nlamp-server: config.sh = ${PURPLE}${lamp_server}${NC}"
+if [ ${lamp_server} == "YES" ]; then
+    __config_lamp
+else
+    echo -e "\t${YELLOW}disable lamp-server install${NC}"
 fi

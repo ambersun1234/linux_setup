@@ -7,6 +7,7 @@ __config_vimrc() {
     fi
 	echo -e "\tchecking .vimrc status"
     if [ ! -s .vimrc ]; then
+        cd ~
         # if .vimrc is empty
 		touch .vimrc
         echo -e ":set nu\n:set ai\n:set cursorline\n:set tabstop=4\n:set shiftwidth=4" >> ${HOME}/.vimrc

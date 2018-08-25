@@ -8,7 +8,7 @@ cd ~
 HOME=$(pwd)
 cd ${WORKING_DIR}
 
-# ------------ modify from here
+# ------------ modify from here ------------
 
 # Apt config
 apt="NO"
@@ -28,4 +28,9 @@ git_username="SECRET"
 vimrc="NO"
 
 # opencv
-opencv="YES"
+opencv="NO"
+
+# lamp server
+lamp_server="YES"
+mysql_password="YOUR_PASSWORD"
+mysql_password_confirm="YOUR_PASSWORD"

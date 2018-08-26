@@ -31,6 +31,9 @@ vimrc="NO"
 opencv="NO"
 
 # lamp server
-lamp_server="YES"
+lamp_server="NO"
 mysql_password="YOUR_PASSWORD"
 mysql_password_confirm="YOUR_PASSWORD"
+
+# docker
+docker="YES"

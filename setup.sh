@@ -5,10 +5,11 @@
 
 # Load config file
 source ./config.sh
-source ./__opencv.sh
-source ./__lamp.sh
-source ./__vimrc.sh
-source ./__git.sh
+source ${WORKING_DIR}/__opencv.sh
+source ${WORKING_DIR}/__lamp.sh
+source ${WORKING_DIR}/__vimrc.sh
+source ${WORKING_DIR}/__git.sh
+source ${WORKING_DIR}/__docker.sh
 
 # Main body of scripts starts here
 
@@ -107,4 +108,13 @@ if [ ${lamp_server} == "YES" ]; then
     __config_lamp
 else
     echo -e "\t${YELLOW}disable lamp-server install${NC}"
+fi
+
+# docker
+cd ${WORKING_DIR}
+echo -e "\ndocker: config.sh = ${PURPLE}${docker}${NC}"
+if [ ${docker} == "YES" ]; then
+    __config_docker
+else
+    echo -e "\t${YELLOW}disable docker install"
 fi

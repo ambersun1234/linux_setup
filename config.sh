@@ -3,6 +3,7 @@ GREEN='\033[32m'
 YELLOW='\033[33m'
 NC='\033[0m'
 PURPLE='\033[0;35m'
+USER=$(whoami)
 WORKING_DIR=$(pwd)
 cd ~
 HOME=$(pwd)
@@ -22,13 +23,13 @@ package="NO"
 # Git config
 git="NO"
 git_email="YOUR_EMAIL@EXAMPLE.COM"
-git_username="SECRET"
+git_username="YOUR_USERNAME"
 
 # vimrc
 vimrc="NO"
 
 # opencv
-opencv="NO"
+opencv="YES"
 
 # lamp server
 lamp_server="NO"
@@ -36,4 +37,4 @@ mysql_password="YOUR_PASSWORD"
 mysql_password_confirm="YOUR_PASSWORD"
 
 # docker
-docker="YES"
+docker="NO"

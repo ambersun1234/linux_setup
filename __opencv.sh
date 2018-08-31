@@ -4,13 +4,15 @@ __config_opencv() {
 	if [ ! -d "${HOME}/library" ]; then
 		cd ${HOME}
 		mkdir library
+		chown ${USER} ${HOME}/library
 		echo -e "\t${HOME}/library not found , create directory \"library\""
 	fi
 
 	# check opencv is already installed or not
-	output=$(python3 ${WORKING_DIR}/opencvConfirm.py)
-	if [ ! ${output} ]; then
+	output=$(python3 ${WORKING_DIR}/opencvConfirm.py 2>&1)
+	if [[ -z ${output} ]]; then
 		echo -e "\t${YELLOW}opencv has already been installed${NC}"
+		return
 	else
 		apt-get install build-essential -y &>> ${WORKING_DIR}/log.txt
 		apt-get install pkg-config -y &>> ${WORKING_DIR}/log.txt
@@ -34,15 +36,26 @@ __config_opencv() {
 
 		# clone opencv source code to local
 		cd ${HOME}/library
-		git clone https://github.com/opencv/opencv.git &>> ${WORKING_DIR}/log.txt
+		if [ ! -d "opencv" ]; then
+			echo -e "\t${YELLOW}opencv not found in ${HOME}/library, cloning into opencv...${NC}"
+			git clone https://github.com/opencv/opencv.git &>> ${WORKING_DIR}/log.txt
+			if [ -d "opencv" ]; then
+				echo -e "\t${GREEN}opencv clone done${NC}"
+			else
+				echo -e "\t${RED}opencv clone failed${NC}"
+				return
+			fi
+		else
+			echo -e "\topencv found in ${HOME}/library"
+		fi
 		cd opencv
 		git checkout 3.4.1 &>> ${WORKING_DIR}/log.txt
 
 		# do while
-		while ! okay;
+		while ! ${okay};
 			do
 			# install opencv
-			cd ${HOME}/library
+			cd ${HOME}/library/opencv
 			mkdir build
 			cd build
 
@@ -60,36 +73,40 @@ __config_opencv() {
 			-D PYTHON3_INCLUDE_DIR=/usr/include/python3.5m \
 			-D PYTHON3_LIBRARY=/usr/lib/python3.5/config-3.5m-arm-linux-gnueabihf/libpython3.5m.so .. &>> ${WORKING_DIR}/log.txt
 
+			echo -e "\t${GREEN}generate done${NC}"
+			echo -e "\tcompile ing..."
 			make -j`nproc` &>> ${WORKING_DIR}/log.txt
-			make install &>> ${WORKING_DIR}/log.txt
+			echo -e "\tmake install ing..."
+			make install -j`nproc` &>> ${WORKING_DIR}/log.txt
 
 			# check installation successful or not
-			output=$(python3 ${WORKING_DIR}/opencvConfirm.py)
-			if [ ${output} == "" ]; then
+			output=$(python3 ${WORKING_DIR}/opencvConfirm.py 2>&1)
+			if [[ -z ${output} ]]; then
 				okay=true
 			else
 				# check five times
-				if [ ${count} -eq 5 ]; then
+				if [ ${count} -eq 1 ]; then
 					break
 				fi
 
 				okay=false
 				# remove build directory and rebuild
-				cd ${HOME}/library
+				cd ${HOME}/library/opencv
 				rm -rf build
 				echo -e "\t${RED}opencv install failed( ${count} time(s) )${NC}"
 				count=$((count+1))
 			fi
 
 			# check five time install
-			if [ ${output} == "" ]; then
+			if [[ -z ${output} ]]; then
 				echo -e "\t${GREEN}opencv install successfully${NC}"
+				break
 			else
 				echo -e "\t${RED}opencv install failed( 5 times exceeded )${NC}"
 			fi
 		done
 	fi
-
+: '
 	# install curl
 	echo -e "\tcurl: "
 	check=$(apt-cache policy curl | grep Installed | cut -c14-)
@@ -104,7 +121,7 @@ __config_opencv() {
 			echo -e "\t\t${GREEN}curl installed successfully${NC}";
 		fi
 	fi
-: '
+
  	# install pigpio
 	cd ${HOME}/library
 	wget https://github.com/joan2937/pigpio/archive/master.zip &>> ${WORKING_DIR}/log.txt

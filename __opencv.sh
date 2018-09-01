@@ -8,6 +8,36 @@ __config_opencv() {
 		echo -e "\t${HOME}/library not found , create directory \"library\""
 	fi
 
+	# check git installed or not
+	check=$(apt-cache policy git | grep Installed | cut -c14-)
+	if [[ -z ${check} ]]; then
+		echo -e "\t${RED}git not found . In config.sh , change package=\"NO\" to package=\"YES\" to install"
+		echo -e "\tquit install opencv${NC}"
+		return
+	else
+		echo -e "\t${GREEN}git found${NC}"
+	fi
+
+	# check cmake installed or not
+	check=$(apt-cache policy cmake | grep Installed | cut -c14-)
+	if [[ -z ${check} ]]; then
+		echo -e "\t${RED}cmake not found . In config.sh , change package=\"NO\" to package=\"YES\" to install"
+		echo -e "\tquit install opencv${NC}"
+		return
+	else
+		echo -e "\t${GREEN}cmake found${NC}"
+	fi
+
+	# check python3 installed or not
+	check=$(apt-cache policy python3 | grep Installed | cut -c14-)
+	if [[ -z ${check} ]]; then
+		echo -e "\t${RED}python3 not found . In config.sh , change package=\"NO\" to package=\"YES\" to install"
+		echo -e "\tquit install opencv${NC}"
+		return
+	else
+		echo -e "\t${GREEN}python3 found${NC}"
+	fi
+
 	# check opencv is already installed or not
 	output=$(python3 ${WORKING_DIR}/opencvConfirm.py 2>&1)
 	if [[ -z ${output} ]]; then
@@ -85,7 +115,7 @@ __config_opencv() {
 				okay=true
 			else
 				# check five times
-				if [ ${count} -eq 1 ]; then
+				if [ ${count} -eq 3 ]; then
 					break
 				fi
 

@@ -3,7 +3,7 @@
 __config_git() {
 	# check git is installed or not
 	check=$(apt-cache policy git | grep Installed | cut -c14-)
-	if [[ -z ${check} ]]; then
+	if [[ ${check} == "(none)" ]]; then
 		echo -e "\t${RED}couldn't find git${NC}"
 		return
 	else

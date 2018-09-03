@@ -54,7 +54,7 @@ if [ ${package} == "YES" ]; then
         for i in ${!checkingList[@]}; do
             check=$(apt-cache policy ${checkingList[$i]} | grep Installed | cut -c14- )
 
-            if [[ -z ${check} ]]; then
+            if [[ ${check} == "(none)" ]]; then
                 echo -e "\t${RED}${checkingList[$i]} install failed${NC}";
                 okay=false
             else

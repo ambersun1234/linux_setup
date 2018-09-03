@@ -10,7 +10,7 @@ __config_opencv() {
 
 	# check git installed or not
 	check=$(apt-cache policy git | grep Installed | cut -c14-)
-	if [[ -z ${check} ]]; then
+	if [[ ${check} == "(none)" ]]; then
 		echo -e "\t${RED}git not found . In config.sh , change package=\"NO\" to package=\"YES\" to install"
 		echo -e "\tquit install opencv${NC}"
 		return
@@ -20,7 +20,7 @@ __config_opencv() {
 
 	# check cmake installed or not
 	check=$(apt-cache policy cmake | grep Installed | cut -c14-)
-	if [[ -z ${check} ]]; then
+	if [[ ${check} == "(none)" ]]; then
 		echo -e "\t${RED}cmake not found . In config.sh , change package=\"NO\" to package=\"YES\" to install"
 		echo -e "\tquit install opencv${NC}"
 		return
@@ -30,7 +30,7 @@ __config_opencv() {
 
 	# check python3 installed or not
 	check=$(apt-cache policy python3 | grep Installed | cut -c14-)
-	if [[ -z ${check} ]]; then
+	if [[ ${check} == "(none)" ]]; then
 		echo -e "\t${RED}python3 not found . In config.sh , change package=\"NO\" to package=\"YES\" to install"
 		echo -e "\tquit install opencv${NC}"
 		return
@@ -140,12 +140,12 @@ __config_opencv() {
 	# install curl
 	echo -e "\tcurl: "
 	check=$(apt-cache policy curl | grep Installed | cut -c14-)
-	if [[ ! -z ${check} ]]; then
+	if [[  ${check} != "(none)" ]]; then
 		echo -e "\t\t${YELLOW}curl has already been installed${NC}"
 	else
 		apt-get install libcurl4-openssl-dev -y &>> ${WORKING_DIR}/log.txt
-		check=$(apt-cache policy curl | grep Installed | cut -c14-)
-		if [[ -z ${check} ]]; then
+		check=$(apt-cache policy libcurl4-openssl-dev | grep Installed | cut -c14-)
+		if [[ ${check} == "(none)" ]]; then
 			echo -e "\t\t${RED}curl installed failed${NC}";
 		else
 			echo -e "\t\t${GREEN}curl installed successfully${NC}";

@@ -1,7 +1,7 @@
 __config_vimrc() {
     # check vim installed or not
     check=$(apt-cache policy vim | grep Installed | cut -c14-)
-    if [[ ${check} =="(none)" ]]; then
+    if [[ ${check} == "(none)" ]]; then
         echo -e "\t${RED}couldn't find vim${NC}"
         return
     fi

@@ -29,7 +29,7 @@ git_username="YOUR_USERNAME"
 vimrc="NO"
 
 # opencv
-opencv="YES"
+opencv="NO"
 
 # lamp server
 lamp_server="NO"
@@ -37,4 +37,4 @@ mysql_password="YOUR_PASSWORD"
 mysql_password_confirm="YOUR_PASSWORD"
 
 # docker
-docker="NO"
+docker="YES"

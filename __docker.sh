@@ -4,9 +4,17 @@ __config_docker() {
 
     apt install docker.io -y &>> ${WORKING_DIR}/log.txt
 
+	status=$(service --status-all | grep docker | cut -c4-5)
+	if [[ ${status} == '-' ]]; then
+		echo -e "\t${YELLOW}docker not activated , starting docker...${NC}"
+	else
+		echo -e "\t${GREEN}docker activated${NC}"
+	fi
+
     check=$(docker run hello-world | grep 'This message shows that your installation appears to be working correctly')
     if [[ -z ${check} ]]; then
         echo -e "\t${RED}docker installation failed${NC}"
+		return
     else
         echo -e "\t${GREEN}docker installation successfully${NC}"
     fi

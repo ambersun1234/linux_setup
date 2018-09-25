@@ -8,15 +8,17 @@ automatic setup for **ubuntu 16.04**
 + configure .vimrc
 + configure git
 + install opencv 3.4.1
-+ install lamp-server
 + install docker
 
-### Clone repo
+### Beta Features
++ install lamp-server
+
+### Clone Repo
 ```=1
 git clone https://github.com/ambersun1234/linux_setup.git
 ```
 
-### Set config
+### Set Config
 You must open the [config.sh](https://github.com/ambersun1234/linux_setup/blob/master/config.sh) file to configure setup<br>the following is part of the [config.sh](https://github.com/ambersun1234/linux_setup/blob/master/config.sh) file
 ```=1
 # Apt config

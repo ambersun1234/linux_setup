@@ -48,4 +48,5 @@ __config_git() {
 	else
 		echo -e "\t${RED}git config execute failed${NC}"
 	fi
+	chown ${USER} ~/.gitconfig
 }

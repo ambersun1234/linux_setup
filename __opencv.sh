@@ -71,6 +71,7 @@ __config_opencv() {
 			git clone https://github.com/opencv/opencv.git &>> ${WORKING_DIR}/log.txt
 			if [ -d "opencv" ]; then
 				echo -e "\t${GREEN}opencv clone done${NC}"
+				chown -R ${USER} ${HOME}/library
 			else
 				echo -e "\t${RED}opencv clone failed${NC}"
 				return
@@ -79,7 +80,14 @@ __config_opencv() {
 			echo -e "\topencv found in ${HOME}/library"
 		fi
 		cd opencv
-		git checkout 3.4.1 &>> ${WORKING_DIR}/log.txt
+		git checkout ${opencv_version} &>> ${WORKING_DIR}/log.txt
+
+		version_check=$(git describe)
+		if [[ ${version_check} != ${opencv_version} ]]; then
+			echo -e "\t${RED}version not found in opencv${NC}"
+		else
+			echo -e "\t${GREEN}switch to version ${opencv_version} successfully${NC}"
+		fi
 
 		# do while
 		while ! ${okay};
@@ -87,6 +95,7 @@ __config_opencv() {
 			# install opencv
 			cd ${HOME}/library/opencv
 			mkdir build
+			chown ${USER} build
 			cd build
 
 			cmake -D CMAKE_BUILD_TYPE=Release \
@@ -104,6 +113,9 @@ __config_opencv() {
 			-D PYTHON3_LIBRARY=/usr/lib/python3.5/config-3.5m-arm-linux-gnueabihf/libpython3.5m.so .. &>> ${WORKING_DIR}/log.txt
 
 			echo -e "\t${GREEN}generate done${NC}"
+
+			chown -R ${USER} .
+
 			echo -e "\tcompile ing..."
 			make -j`nproc` &>> ${WORKING_DIR}/log.txt
 			echo -e "\tmake install ing..."
@@ -136,40 +148,4 @@ __config_opencv() {
 			fi
 		done
 	fi
-: '
-	# install curl
-	echo -e "\tcurl: "
-	check=$(apt-cache policy curl | grep Installed | cut -c14-)
-	if [[  ${check} != "(none)" ]]; then
-		echo -e "\t\t${YELLOW}curl has already been installed${NC}"
-	else
-		apt-get install libcurl4-openssl-dev -y &>> ${WORKING_DIR}/log.txt
-		check=$(apt-cache policy libcurl4-openssl-dev | grep Installed | cut -c14-)
-		if [[ ${check} == "(none)" ]]; then
-			echo -e "\t\t${RED}curl installed failed${NC}";
-		else
-			echo -e "\t\t${GREEN}curl installed successfully${NC}";
-		fi
-	fi
-
- 	# install pigpio
-	cd ${HOME}/library
-	wget https://github.com/joan2937/pigpio/archive/master.zip &>> ${WORKING_DIR}/log.txt
-	unzip master.zip &>> ${WORKING_DIR}/log.txt
-	cd pigpio-master
-	make -j`nproc` &>> ${WORKING_DIR}/log.txt
-	make install &>> ${WORKING_DIR}/log.txt
-	echo -e "\t\t${GREEN}gpio install done${NC}"
-
-	# install raspicam
-	cd ${HOME}/library
-	git clone https://github.com/cedricve/raspicam &>> ${WORKING_DIR}/log.txt
-	cd raspicam
-	mkdir build
-	cd build
-	cmake .. &>> ${WORKING_DIR}/log.txt
-	make &>> ${WORKING_DIR}/log.txt
-	make install &>> ${WORKING_DIR}/log.txt
-	ldconfig &>> ${WORKING_DIR}/log.txt
-'
 }

@@ -31,6 +31,9 @@ vimrc="NO"
 # opencv
 opencv="NO"
 
+# opencv version
+opencv_version="3.4.3"
+
 # lamp server
 lamp_server="NO"
 mysql_password="YOUR_PASSWORD"

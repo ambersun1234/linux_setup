@@ -117,9 +117,8 @@ __config_opencv() {
 			chown -R ${USER} .
 
 			echo -e "\tcompile ing..."
-			make -j`nproc` &>> ${WORKING_DIR}/log.txt
-			echo -e "\tmake install ing..."
-			make install -j`nproc` &>> ${WORKING_DIR}/log.txt
+
+			gnome-terminal --tab -e "bash -c \"make -j`nproc` | tee -a ${WORKING_DIR}/log.txt; make install -j`nproc` | tee -a ${WORKING_DIR}/log.txt; exec bash\""
 
 			# check installation successful or not
 			output=$(python3 ${WORKING_DIR}/opencvConfirm.py 2>&1)

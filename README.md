@@ -7,7 +7,7 @@ automatic setup for **ubuntu 16.04**
 + install vim , git , htop , build-essential , cmake , automake
 + configure .vimrc
 + configure git
-+ install opencv 3.4.1
++ install opencv
 + install docker
 
 ### Beta Features

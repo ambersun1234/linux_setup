@@ -118,7 +118,7 @@ __config_opencv() {
 
 			echo -e "\tcompile ing..."
 
-			gnome-terminal --tab -e "bash -c \"make -j`nproc` | tee -a ${WORKING_DIR}/log.txt; make install -j`nproc` | tee -a ${WORKING_DIR}/log.txt; exec bash\""
+			gnome-terminal --disable-factory --tab -e "bash -c \"make -j`nproc` | tee -a ${WORKING_DIR}/log.txt; make install -j`nproc` | tee -a ${WORKING_DIR}/log.txt;\""
 
 			# check installation successful or not
 			output=$(python3 ${WORKING_DIR}/opencvConfirm.py 2>&1)

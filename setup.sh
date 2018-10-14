@@ -10,6 +10,7 @@ source ${WORKING_DIR}/__lamp.sh
 source ${WORKING_DIR}/__vimrc.sh
 source ${WORKING_DIR}/__git.sh
 source ${WORKING_DIR}/__docker.sh
+source ${WORKING_DIR}/__caffe.sh
 
 # Main body of scripts starts here
 
@@ -97,6 +98,15 @@ cd ${WORKING_DIR}
 echo -e "\nopencv: config.sh = ${PURPLE}${opencv}${NC}"
 if [ ${opencv} == "YES" ]; then
     __config_opencv
+else
+    echo -e "\t${YELLOW}disable opencv install${NC}"
+fi
+
+# caffe
+cd ${WORKING_DIR}
+echo -e "\ncaffe: config.sh = ${PURPLE}${caffe}${NC}"
+if [ ${caffe} == "YES" ]; then
+    __config_caffe
 else
     echo -e "\t${YELLOW}disable opencv install${NC}"
 fi

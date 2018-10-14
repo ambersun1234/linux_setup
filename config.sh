@@ -31,6 +31,9 @@ vimrc="NO"
 # opencv
 opencv="NO"
 
+# caffe
+caffe="YES"
+
 # opencv version
 opencv_version="3.4.3"
 
@@ -40,4 +43,4 @@ mysql_password="YOUR_PASSWORD"
 mysql_password_confirm="YOUR_PASSWORD"
 
 # docker
-docker="YES"
+docker="NO"

@@ -8,6 +8,7 @@ automatic setup for **ubuntu 16.04**
 + configure .vimrc
 + configure git
 + install opencv
++ install caffe
 + install docker
 
 ### Beta Features

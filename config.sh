@@ -32,7 +32,10 @@ vimrc="NO"
 opencv="NO"
 
 # caffe
-caffe="YES"
+caffe="NO"
+
+# openpose
+openpose="YES"
 
 # opencv version
 opencv_version="3.4.3"

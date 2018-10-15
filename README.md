@@ -9,6 +9,7 @@ automatic setup for **ubuntu 16.04**
 + configure git
 + install opencv
 + install caffe
++ install openpose
 + install docker
 
 ### Beta Features

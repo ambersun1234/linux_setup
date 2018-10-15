@@ -11,6 +11,7 @@ source ${WORKING_DIR}/__vimrc.sh
 source ${WORKING_DIR}/__git.sh
 source ${WORKING_DIR}/__docker.sh
 source ${WORKING_DIR}/__caffe.sh
+source ${WORKING_DIR}/__openpose.sh
 
 # Main body of scripts starts here
 
@@ -109,6 +110,15 @@ if [ ${caffe} == "YES" ]; then
     __config_caffe
 else
     echo -e "\t${YELLOW}disable opencv install${NC}"
+fi
+
+# openpose
+cd ${WORKING_DIR}
+echo -e "\nopenpose: config.sh = ${PURPLE}${openpose}${NC}"
+if [ ${openpose} == "YES" ]; then
+    __config_openpose
+else
+    echo -e "\t${YELLOW}disable openpose install${NC}"
 fi
 
 # lamp-server

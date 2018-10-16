@@ -23,6 +23,8 @@ echo -e "\n\n---------------setup.sh start: ${currentTime}" &>> ${WORKING_DIR}/l
 cd ${WORKING_DIR}
 echo -e "apt: config.sh = ${PURPLE}${apt}${NC}"
 if [ ${apt} == "YES" ]; then
+    # add git ppa
+    sudo add-apt-repository ppa:git-core/ppa
     if apt update &>> ${WORKING_DIR}/log.txt; then
         echo -e "\t${GREEN}apt update successfully${NC}"
     else

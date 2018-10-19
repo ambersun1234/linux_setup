@@ -25,6 +25,9 @@ git="NO"
 git_email="YOUR_EMAIL@EXAMPLE.COM"
 git_username="YOUR_USERNAME"
 
+# chrome
+chrome="NO"
+
 # vimrc
 vimrc="NO"
 

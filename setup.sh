@@ -78,6 +78,29 @@ else
     echo -e "\t${YELLOW}disable package install${NC}"
 fi
 
+# install google chrome
+cd ${WORKING_DIR}
+echo -e "\nchrome: config.sh = ${PURPLE}${chrome}${NC}"
+if [ ${chrome} == "YES" ]; then
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb &>> ${WORKING_DIR}/log.txt
+    dpkg -i install google-chrome*.deb
+    check=$(google-chrome --version | grep Google\ Chrome | cut -c14-)
+    if [ ${check} != "" ]; then
+        echo -e "\t${GREEN}google chrome installed properly${NC}"
+    else
+        echo -e "\t${RED}google chrome installed failed${NC}"
+    fi
+    # move .deb file to download
+    mv google-chrome*.deb ~/Downloads/
+    if [ -e ~/Downloads/google-chrome*.db ]; then
+        echo -e "\t${GREEN}moving .deb file to ${HOME}/Downloads/ success${NC}"
+    else
+        echo -e "\t${RED}moving .deb file to ${HOME}/Downloads/ failed${NC}"
+    fi
+else
+    echo -e "\t${YELLOW}disable install chrome${NC}"
+fi
+
 # config .vimrc file
 cd ${WORKING_DIR}
 echo -e "\n.vimrc: config.sh = ${PURPLE}${vimrc}${NC}"

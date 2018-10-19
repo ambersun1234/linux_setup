@@ -41,6 +41,14 @@ __config_openpose() {
     # check caffe installed or not
     echo -e "\t${YELLOW}make sure that caffe exists in ${HOME}/library/caffe${NC}"
 
+    __network_check
+    retval=$?
+
+    if [ $retval -eq 1 ]; then
+        echo -e "\t${RED}network not available${NC}"
+        echo -e "\t${RED}abort configure openpose${NC}"
+        return
+    fi
 
     cd ${HOME}/library
     if [[ -d "openpose" ]]; then

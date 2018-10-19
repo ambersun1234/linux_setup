@@ -40,6 +40,14 @@ __config_caffe() {
 
     echo -e "\t${YELLOW}make sure you have cuda & cudnn installed properly${NC}"
 
+    __network_check
+    retval=$?
+    if [ $retval -eq 1 ]; then
+        echo -e "\t${RED}network not available${NC}"
+        echo -e "\t${RED}abort configure caffe${NC}"
+        return
+    fi
+
     apt-get install -y libprotobuf-dev libleveldb-dev libsnappy-dev libhdf5-serial-dev protobuf-compiler &>> ${WORKING_DIR}/log.txt
     apt-get install -y libatlas-base-dev &>> ${WORKING_DIR}/log.txt
     apt-get install -y --no-install-recommends libboost-all-dev &>> ${WORKING_DIR}/log.txt

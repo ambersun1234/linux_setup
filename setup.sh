@@ -13,6 +13,16 @@ source ${WORKING_DIR}/__docker.sh
 source ${WORKING_DIR}/__caffe.sh
 source ${WORKING_DIR}/__openpose.sh
 
+__network_check() {
+    check=$(ping -c 1 8.8.8.8 | grep 64\ bytes\ from)
+    if [ "$check" == "" ]; then
+        returnValue=1
+    else
+        returnValue=0
+    fi
+    return "$returnValue"
+}
+
 # Main body of scripts starts here
 
 # write current datetime to log.txt
@@ -23,12 +33,19 @@ echo -e "\n\n---------------setup.sh start: ${currentTime}" &>> ${WORKING_DIR}/l
 cd ${WORKING_DIR}
 echo -e "apt: config.sh = ${PURPLE}${apt}${NC}"
 if [ ${apt} == "YES" ]; then
-    # add git ppa
-    sudo add-apt-repository ppa:git-core/ppa &>> ${WORKING_DIR}/log.txt
-    if apt update &>> ${WORKING_DIR}/log.txt; then
-        echo -e "\t${GREEN}apt update successfully${NC}"
+    __network_check
+    retval=$?
+
+    if [ $retval -eq 0 ]; then
+        # add git ppa
+        sudo add-apt-repository ppa:git-core/ppa &>> ${WORKING_DIR}/log.txt
+        if apt update &>> ${WORKING_DIR}/log.txt; then
+            echo -e "\t${GREEN}apt update successfully${NC}"
+        else
+            echo -e "\t${RED}apt update failed${NC}"
+        fi
     else
-        echo -e "\t${RED}apt update failed${NC}"
+        echo -e "\t${RED}network not available${NC}"
     fi
 else
     echo -e "\t${YELLOW}disable apt update${NC}"
@@ -38,10 +55,17 @@ fi
 cd ${WORKING_DIR}
 echo -e "\napt-get: config.sh = ${PURPLE}${apt-get}${NC}"
 if [ ${apt_get} == "YES" ]; then
-    if apt-get update &>> ${WORKING_DIR}/log.txt; then
-        echo -e "\t${GREEN}apt-get update successfully${NC}"
+    __network_check
+    retval=$?
+
+    if [ $retval -eq 0 ]; then
+        if apt-get update &>> ${WORKING_DIR}/log.txt; then
+            echo -e "\t${GREEN}apt-get update successfully${NC}"
+        else
+            echo -e "\t${RED}apt-get update failed${NC}"
+        fi
     else
-        echo -e "\t${RED}apt-get update failed${NC}"
+        echo -e "\t${RED}network not available${NC}"
     fi
 else
     echo -e "\t${YELLOW}disable apt-get update${NC}"
@@ -51,28 +75,35 @@ fi
 cd ${WORKING_DIR}
 echo -e "\nessential package( vim , git , htop , build-essential , cmake , automake ): config.sh = ${PURPLE}${package}${NC}"
 if [ ${package} == "YES" ]; then
-    if apt install vim git htop build-essential cmake automake -y &>> ${WORKING_DIR}/log.txt; then
-        declare -a checkingList=( [0]="vim" [1]="git" [2]="htop" [3]="build-essential" [4]="cmake" [5]="automake" )
-        okay=true
+    __network_check
+    retval=$?
 
-        for i in ${!checkingList[@]}; do
-            check=$(apt-cache policy ${checkingList[$i]} | grep Installed | cut -c14- )
+    if [ $retval -eq 0 ]; then
+        if apt install vim git htop build-essential cmake automake -y &>> ${WORKING_DIR}/log.txt; then
+            declare -a checkingList=( [0]="vim" [1]="git" [2]="htop" [3]="build-essential" [4]="cmake" [5]="automake" )
+            okay=true
 
-            if [[ ${check} == "(none)" ]]; then
-                echo -e "\t${RED}${checkingList[$i]} install failed${NC}";
-                okay=false
+            for i in ${!checkingList[@]}; do
+                check=$(apt-cache policy ${checkingList[$i]} | grep Installed | cut -c14- )
+
+                if [[ ${check} == "(none)" ]]; then
+                    echo -e "\t${RED}${checkingList[$i]} install failed${NC}";
+                    okay=false
+                else
+                    echo -e "\t${GREEN}${checkingList[$i]} installed successfully${NC}"
+                fi
+            done
+
+            if [ ${okay} == true ]; then
+                echo -e "\n\t${GREEN}package install successfully${NC}"
             else
-                echo -e "\t${GREEN}${checkingList[$i]} installed successfully${NC}"
+                echo -e "\n\t${RED}package install failed${NC}"
             fi
-        done
-
-        if [ ${okay} == true ]; then
-            echo -e "\n\t${GREEN}package install successfully${NC}"
         else
-            echo -e "\n\t${RED}package install failed${NC}"
+            echo -e "\t${RED}package install failed${NC}"
         fi
     else
-        echo -e "\t${RED}package install failed${NC}"
+        echo -e "\t${RED}network not available${NC}"
     fi
 else
     echo -e "\t${YELLOW}disable package install${NC}"
@@ -82,20 +113,27 @@ fi
 cd ${WORKING_DIR}
 echo -e "\nchrome: config.sh = ${PURPLE}${chrome}${NC}"
 if [ ${chrome} == "YES" ]; then
-    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb &>> ${WORKING_DIR}/log.txt
-    dpkg -i install google-chrome*.deb &>> ${WORKING_DIR}/log.txt
-    check=$(google-chrome --version | grep Google\ Chrome | cut -c14-)
-    if [ ${check} != "" ]; then
-        echo -e "\t${GREEN}google chrome installed properly${NC}"
+    __network_check
+    retval=$?
+
+    if [ $retval -eq 0 ]; then
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb &>> ${WORKING_DIR}/log.txt
+        dpkg -i install google-chrome*.deb &>> ${WORKING_DIR}/log.txt
+        check=$(google-chrome --version | grep Google\ Chrome | cut -c14-)
+        if [ ${check} != "" ]; then
+            echo -e "\t${GREEN}google chrome installed properly${NC}"
+        else
+            echo -e "\t${RED}google chrome installed failed${NC}"
+        fi
+        # move .deb file to download
+        mv google-chrome*.deb ~/Downloads/
+        if [ -e ~/Downloads/google-chrome*.deb ]; then
+            echo -e "\t${GREEN}moving .deb file to ${HOME}/Downloads/ success${NC}"
+        else
+            echo -e "\t${RED}moving .deb file to ${HOME}/Downloads/ failed${NC}"
+        fi
     else
-        echo -e "\t${RED}google chrome installed failed${NC}"
-    fi
-    # move .deb file to download
-    mv google-chrome*.deb ~/Downloads/
-    if [ -e ~/Downloads/google-chrome*.deb ]; then
-        echo -e "\t${GREEN}moving .deb file to ${HOME}/Downloads/ success${NC}"
-    else
-        echo -e "\t${RED}moving .deb file to ${HOME}/Downloads/ failed${NC}"
+        echo -e "\t${RED}network not available${NC}"
     fi
 else
     echo -e "\t${YELLOW}disable install chrome${NC}"

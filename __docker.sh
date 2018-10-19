@@ -2,6 +2,15 @@
 
 __config_docker() {
 
+    __network_check
+    retval=$?
+
+    if [ $retval -eq 1 ]; then
+        echo -e "\t${RED}network not available${NC}"
+        echo -e "\t${RED}abort install docker${NC}"
+        return
+    fi
+
     apt install docker.io -y &>> ${WORKING_DIR}/log.txt
 
 	status=$(service --status-all | grep docker | cut -c4-5)

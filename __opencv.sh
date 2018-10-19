@@ -44,6 +44,15 @@ __config_opencv() {
 		echo -e "\t${YELLOW}opencv has already been installed${NC}"
 		return
 	else
+		__network_check
+	    retval=$?
+
+		if [ $retval -eq 1 ]; then
+			echo -e "\t${RED}network not available${NC}"
+			echo -e "\t${RED}abort configure opencv${NC}"
+			return
+		fi
+		
 		apt-get install build-essential -y &>> ${WORKING_DIR}/log.txt
 		apt-get install pkg-config -y &>> ${WORKING_DIR}/log.txt
 

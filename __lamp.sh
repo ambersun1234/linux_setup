@@ -1,8 +1,15 @@
 #!bin/bash
 
-source ./config.sh
-
 __config_lamp() {
+    __network_check
+    retval=$?
+
+    if [ $retval -eq 1 ]; then
+        echo -e "\t${RED}network not available${NC}"
+        echo -e "\t${RED}abort install lamp_server${NC}"
+        return
+    fi
+    
     # install lamp-server
     { echo ${mysql_password}; echo ${mysql_password_confirm}; } | apt install lamp-server^ -y &>> ${WORKING_DIR}/log.txt
 

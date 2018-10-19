@@ -24,7 +24,7 @@ cd ${WORKING_DIR}
 echo -e "apt: config.sh = ${PURPLE}${apt}${NC}"
 if [ ${apt} == "YES" ]; then
     # add git ppa
-    sudo add-apt-repository ppa:git-core/ppa
+    sudo add-apt-repository ppa:git-core/ppa &>> ${WORKING_DIR}/log.txt
     if apt update &>> ${WORKING_DIR}/log.txt; then
         echo -e "\t${GREEN}apt update successfully${NC}"
     else
@@ -83,7 +83,7 @@ cd ${WORKING_DIR}
 echo -e "\nchrome: config.sh = ${PURPLE}${chrome}${NC}"
 if [ ${chrome} == "YES" ]; then
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb &>> ${WORKING_DIR}/log.txt
-    dpkg -i install google-chrome*.deb
+    dpkg -i install google-chrome*.deb &>> ${WORKING_DIR}/log.txt
     check=$(google-chrome --version | grep Google\ Chrome | cut -c14-)
     if [ ${check} != "" ]; then
         echo -e "\t${GREEN}google chrome installed properly${NC}"
@@ -92,7 +92,7 @@ if [ ${chrome} == "YES" ]; then
     fi
     # move .deb file to download
     mv google-chrome*.deb ~/Downloads/
-    if [ -e ~/Downloads/google-chrome*.db ]; then
+    if [ -e ~/Downloads/google-chrome*.deb ]; then
         echo -e "\t${GREEN}moving .deb file to ${HOME}/Downloads/ success${NC}"
     else
         echo -e "\t${RED}moving .deb file to ${HOME}/Downloads/ failed${NC}"

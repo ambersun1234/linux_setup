@@ -85,6 +85,7 @@ __config_opencv() {
 		version_check=$(git describe)
 		if [[ ${version_check} != ${opencv_version} ]]; then
 			echo -e "\t${RED}version not found in opencv${NC}"
+			return
 		else
 			echo -e "\t${GREEN}switch to version ${opencv_version} successfully${NC}"
 		fi
@@ -126,7 +127,8 @@ __config_opencv() {
 				okay=true
 			else
 				# check five times
-				if [ ${count} -eq 3 ]; then
+				if [ ${count} -eq 5 ]; then
+					echo -e "\t${RED}opencv install failed( 5 times exceeded )${NC}"
 					break
 				fi
 
@@ -142,8 +144,6 @@ __config_opencv() {
 			if [[ -z ${output} ]]; then
 				echo -e "\t${GREEN}opencv install successfully${NC}"
 				break
-			else
-				echo -e "\t${RED}opencv install failed( 5 times exceeded )${NC}"
 			fi
 		done
 	fi

@@ -4,7 +4,6 @@ __config_openpose() {
     if [ ! -d "${HOME}/library" ]; then
         cd ${HOME}
         mkdir library
-        chown ${USER} ${HOME}/library
         echo -e "\t${HOME}/library not found , create directory \"library\""
     fi
 
@@ -81,10 +80,8 @@ __config_openpose() {
 
     echo -e "\tcompile ing..."
 
-    gnome-terminal --disable-factory --tab -e "bash -c \"make -j`nproc` | tee -a ${WORKING_DIR}/log.txt; make install -j`nproc` | tee -a ${WORKING_DIR}/log.txt;\""
+    gnome-terminal --disable-factory --tab -e "bash -c \"make -j`nproc` | tee -a ${WORKING_DIR}/log.txt; sudo make install -j`nproc` | tee -a ${WORKING_DIR}/log.txt;\""
 
     cd ${HOME}/library/openpose
-    chown -R ${USER} .*
-    chown -R ${USER} *
     echo -e "\t${GREEN}compile done${NC}";
 }

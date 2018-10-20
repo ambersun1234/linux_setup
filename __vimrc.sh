@@ -15,7 +15,6 @@ __config_vimrc() {
         echo -e ":set nu\n:set ai\n:set cursorline\n:set tabstop=4\n:set shiftwidth=4" >> ${HOME}/.vimrc
 		echo -e "\t${GREEN}.vimrc set up successfully${NC}"
 
-        chown ${USER} .vimrc
 	else
 		echo -e "\t${GREEN}.vimrc already set up${NC}"
     fi

@@ -4,7 +4,6 @@ __config_opencv() {
 	if [ ! -d "${HOME}/library" ]; then
 		cd ${HOME}
 		mkdir library
-		chown ${USER} ${HOME}/library
 		echo -e "\t${HOME}/library not found , create directory \"library\""
 	fi
 
@@ -53,22 +52,22 @@ __config_opencv() {
 			return
 		fi
 		
-		apt-get install build-essential -y &>> ${WORKING_DIR}/log.txt
-		apt-get install pkg-config -y &>> ${WORKING_DIR}/log.txt
+		sudo apt-get install build-essential -y &>> ${WORKING_DIR}/log.txt
+		sudo apt-get install pkg-config -y &>> ${WORKING_DIR}/log.txt
 
-		apt-get install libjpeg-dev libtiff5-dev libjasper-dev libpng12-dev -y &>> ${WORKING_DIR}/log.txt
-		apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev -y &>> ${WORKING_DIR}/log.txt
-		apt-get install libxvidcore-dev libx264-dev libgtk2.0-dev libgtk-3-dev -y &>> ${WORKING_DIR}/log.txt
-		apt-get install libcanberra-gtk* -y &>> ${WORKING_DIR}/log.txt
-		apt-get install libatlas-base-dev gfortran -y &>> ${WORKING_DIR}/log.txt
+		sudo apt-get install libjpeg-dev libtiff5-dev libjasper-dev libpng12-dev -y &>> ${WORKING_DIR}/log.txt
+		sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev -y &>> ${WORKING_DIR}/log.txt
+		sudo apt-get install libxvidcore-dev libx264-dev libgtk2.0-dev libgtk-3-dev -y &>> ${WORKING_DIR}/log.txt
+		sudo apt-get install libcanberra-gtk* -y &>> ${WORKING_DIR}/log.txt
+		sudo apt-get install libatlas-base-dev gfortran -y &>> ${WORKING_DIR}/log.txt
 
-		apt-get install python-dev python-pip -y &>> ${WORKING_DIR}/log.txt
-		pip install --upgrade pip &>> ${WORKING_DIR}/log.txt
-		pip install numpy &>> ${WORKING_DIR}/log.txt
+		sudo apt-get install python-dev python-pip -y &>> ${WORKING_DIR}/log.txt
+		sudo pip install --upgrade pip &>> ${WORKING_DIR}/log.txt
+		sudo pip install numpy &>> ${WORKING_DIR}/log.txt
 
-		apt-get install python3-dev python3-pip -y &>> ${WORKING_DIR}/log.txt
-		pip3 install --upgrade pip &>> ${WORKING_DIR}/log.txt
-		pip3 install numpy &>> ${WORKING_DIR}/log.txt
+		sudo apt-get install python3-dev python3-pip -y &>> ${WORKING_DIR}/log.txt
+		sudo pip3 install --upgrade pip &>> ${WORKING_DIR}/log.txt
+		sudo pip3 install numpy &>> ${WORKING_DIR}/log.txt
 
 		okay=false
 		count=1
@@ -80,7 +79,6 @@ __config_opencv() {
 			git clone https://github.com/opencv/opencv.git &>> ${WORKING_DIR}/log.txt
 			if [ -d "opencv" ]; then
 				echo -e "\t${GREEN}opencv clone done${NC}"
-				chown -R ${USER} ${HOME}/library
 			else
 				echo -e "\t${RED}opencv clone failed${NC}"
 				return
@@ -105,7 +103,6 @@ __config_opencv() {
 			# install opencv
 			cd ${HOME}/library/opencv
 			mkdir build
-			chown ${USER} build
 			cd build
 
 			cmake -D CMAKE_BUILD_TYPE=Release \
@@ -124,11 +121,10 @@ __config_opencv() {
 
 			echo -e "\t${GREEN}generate done${NC}"
 
-			chown -R ${USER} .
 
 			echo -e "\tcompile ing..."
 
-			gnome-terminal --disable-factory --tab -e "bash -c \"make -j`nproc` | tee -a ${WORKING_DIR}/log.txt; make install -j`nproc` | tee -a ${WORKING_DIR}/log.txt;\""
+			gnome-terminal --disable-factory --tab -e "bash -c \"make -j`nproc` | tee -a ${WORKING_DIR}/log.txt; sudo make install -j`nproc` | tee -a ${WORKING_DIR}/log.txt;\""
 
 			# check installation successful or not
 			output=$(python3 ${WORKING_DIR}/opencvConfirm.py 2>&1)

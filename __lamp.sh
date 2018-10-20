@@ -11,7 +11,7 @@ __config_lamp() {
     fi
     
     # install lamp-server
-    { echo ${mysql_password}; echo ${mysql_password_confirm}; } | apt install lamp-server^ -y &>> ${WORKING_DIR}/log.txt
+    { echo ${mysql_password}; echo ${mysql_password_confirm}; } | sudo apt install lamp-server^ -y &>> ${WORKING_DIR}/log.txt
 
     # check server properly installed
     check=$(service --status-all | grep apache)
@@ -35,6 +35,6 @@ __config_lamp() {
 
     # block on start up
     echo -e "disable apache & mysql start up"
-    systemctl disable mysql &>> ${WORKING_DIR}/log.txt
-    systemctl disable apache &>> ${WORKING_DIR}/log.txt
+    sudo systemctl disable mysql &>> ${WORKING_DIR}/log.txt
+    suo systemctl disable apache &>> ${WORKING_DIR}/log.txt
 }

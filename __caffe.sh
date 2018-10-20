@@ -4,7 +4,6 @@ __config_caffe() {
     if [ ! -d "${HOME}/library" ]; then
 		cd ${HOME}
 		mkdir library
-		chown ${USER} ${HOME}/library
 		echo -e "\t${HOME}/library not found , create directory \"library\""
 	fi
 
@@ -48,13 +47,13 @@ __config_caffe() {
         return
     fi
 
-    apt-get install -y libprotobuf-dev libleveldb-dev libsnappy-dev libhdf5-serial-dev protobuf-compiler &>> ${WORKING_DIR}/log.txt
-    apt-get install -y libatlas-base-dev &>> ${WORKING_DIR}/log.txt
-    apt-get install -y --no-install-recommends libboost-all-dev &>> ${WORKING_DIR}/log.txt
-    apt-get install -y libgflags-dev libgoogle-glog-dev liblmdb-dev &>> ${WORKING_DIR}/log.txt
-    apt-get install -y python-pip &>> ${WORKING_DIR}/log.txt
-    apt-get install -y python-dev &>> ${WORKING_DIR}/log.txt
-    apt-get install -y python-numpy python-scipy &>> ${WORKING_DIR}/log.txt
+    sudo apt-get install -y libprotobuf-dev libleveldb-dev libsnappy-dev libhdf5-serial-dev protobuf-compiler &>> ${WORKING_DIR}/log.txt
+    sudo apt-get install -y libatlas-base-dev &>> ${WORKING_DIR}/log.txt
+    sudo apt-get install -y --no-install-recommends libboost-all-dev &>> ${WORKING_DIR}/log.txt
+    sudo apt-get install -y libgflags-dev libgoogle-glog-dev liblmdb-dev &>> ${WORKING_DIR}/log.txt
+    sudo apt-get install -y python-pip &>> ${WORKING_DIR}/log.txt
+    sudo apt-get install -y python-dev &>> ${WORKING_DIR}/log.txt
+    sudo apt-get install -y python-numpy python-scipy &>> ${WORKING_DIR}/log.txt
 
     cd ${HOME}/library
     if [[ -d "caffe" ]]; then
@@ -86,5 +85,4 @@ __config_caffe() {
     echo -e "\t${GREEN}caffe installed successfully${NC}"
 
     cd ${HOME}/library/
-    chown -R ${USER} caffe/
 }

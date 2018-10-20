@@ -39,8 +39,7 @@ package="NO"
     + Caution! the word "YES" and "NO" are both ***case sensitive***
 
 ### Usage
-please run with ***sudo***
 ```=1
 cd linux_setup
-sudo ./setup.sh
+bash ./setup.sh
 ```

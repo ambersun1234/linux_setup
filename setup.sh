@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # A script to auto setup linux( ubuntu ) develop environment
-# Please run the script with sudo mode
 
 # Load config file
 source ./config.sh

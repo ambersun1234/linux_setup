@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # A script to auto setup linux( ubuntu ) develop environment
-
+s=$(date +%s)
 # Load config file
 source ./config.sh
 source ${WORKING_DIR}/__opencv.sh
@@ -200,3 +200,15 @@ if [ ${docker} == "YES" ]; then
 else
     echo -e "\t${YELLOW}disable docker install"
 fi
+
+end=$(date +%s)
+timing=$((e-s))
+currentTime=$(date +'%Y-%m-%d %H:%M:%S')
+echo -e "\n\n---------------setup.sh stop: ${currentTime}" &>> ${WORKING_DIR}/log.txt
+
+h=$((timing/3600))
+timing=$(timing-3600*h)
+m=$((timing/60))
+timing=$(timing-60*m)
+s=${timing}
+printf "\ttotal execution time: %h %m %s" ${h} ${m} ${s}

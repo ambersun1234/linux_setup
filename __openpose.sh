@@ -53,7 +53,7 @@ __config_openpose() {
     if [[ -d "openpose" ]]; then
         echo -e "\t${GREEN}git clone openpose successfully${NC}"
     else
-        git clone https://github.com/CMU-Perceptual-Computing-Lab/openpose
+        git clone https://github.com/CMU-Perceptual-Computing-Lab/openpose &>> ${WORKING_DIR}/log.txt
         if [[ -d "caffe" ]]; then
             echo -e "\t${GREEN}git clone openpose successfully${NC}"
         else
@@ -71,6 +71,7 @@ __config_openpose() {
 
     cp -R ${HOME}/library/openpose/3rdparty/caffe/include/caffe/* ${HOME}/library/openpose/3rdparty/caffe/build/include/caffe/
 
+    echo -e "\t${YELLOW}cmake openpose takes quite a long time , with downloading some of the packages${NC}"
     cmake -D Caffe_INCLUDE_DIRS:PATH="${HOME}/library/openpose/3rdparty/caffe/build/include" \
           -D BUILD_PYTHON:BOOL="1" \
           -D BUILD_CAFFE:BOOL="0" \

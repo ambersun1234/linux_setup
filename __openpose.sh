@@ -85,4 +85,15 @@ __config_openpose() {
 
     cd ${HOME}/library/openpose
     echo -e "\t${GREEN}compile done${NC}";
+
+    cd ${HOME}
+    echo export PYTHONPATH=/usr/local/python/:$PYTHONPATH >> .bashrc
+    source .bashrc
+
+    check=$(python3 ${WORKING_DIR}/openposeConfirm.py)
+    if [[ -z ${output} ]]; then
+        echo -e "\t${GREEN}openpose installed properly${NC}"
+    else
+        echo -e "\t${RED}openpose installed failed...${NC}";
+    fi
 }

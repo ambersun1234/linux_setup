@@ -37,8 +37,8 @@ if [ ${apt} == "YES" ]; then
 
     if [ $retval -eq 0 ]; then
         # add git ppa
-        sudo add-apt-repository ppa:git-core/ppa &>> ${WORKING_DIR}/log.txt
-        if apt update &>> ${WORKING_DIR}/log.txt; then
+        sudo add-apt-repository ppa:git-core/ppa &>> ${WORKING_DIR}/log.txt -y
+        if sudo apt update &>> ${WORKING_DIR}/log.txt; then
             echo -e "\t${GREEN}apt update successfully${NC}"
         else
             echo -e "\t${RED}apt update failed${NC}"
@@ -58,7 +58,7 @@ if [ ${apt_get} == "YES" ]; then
     retval=$?
 
     if [ $retval -eq 0 ]; then
-        if apt-get update &>> ${WORKING_DIR}/log.txt; then
+        if sudo apt-get update &>> ${WORKING_DIR}/log.txt; then
             echo -e "\t${GREEN}apt-get update successfully${NC}"
         else
             echo -e "\t${RED}apt-get update failed${NC}"
@@ -78,7 +78,7 @@ if [ ${package} == "YES" ]; then
     retval=$?
 
     if [ $retval -eq 0 ]; then
-        if apt install vim git htop build-essential cmake automake -y &>> ${WORKING_DIR}/log.txt; then
+        if sudo apt install vim git htop build-essential cmake automake -y &>> ${WORKING_DIR}/log.txt; then
             declare -a checkingList=( [0]="vim" [1]="git" [2]="htop" [3]="build-essential" [4]="cmake" [5]="automake" )
             okay=true
 
@@ -117,7 +117,7 @@ if [ ${chrome} == "YES" ]; then
 
     if [ $retval -eq 0 ]; then
         wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb &>> ${WORKING_DIR}/log.txt
-        dpkg -i install google-chrome*.deb &>> ${WORKING_DIR}/log.txt
+        sudo dpkg -i install google-chrome*.deb &>> ${WORKING_DIR}/log.txt
         check=$(google-chrome --version | grep Google\ Chrome | cut -c14-)
         if [ ${check} != "" ]; then
             echo -e "\t${GREEN}google chrome installed properly${NC}"
@@ -207,8 +207,8 @@ currentTime=$(date +'%Y-%m-%d %H:%M:%S')
 echo -e "\n\n---------------setup.sh stop: ${currentTime}" &>> ${WORKING_DIR}/log.txt
 
 h=$((timing/3600))
-timing=$(timing-3600*h)
+timing=$((timing-3600*h))
 m=$((timing/60))
-timing=$(timing-60*m)
+timing=$((timing-60*m))
 s=${timing}
-printf "\ttotal execution time: %h %m %s" ${h} ${m} ${s}
+printf "\ttotal execution time: %d h %d m %d s" ${h} ${m} ${s}

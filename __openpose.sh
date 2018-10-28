@@ -69,7 +69,8 @@ __config_openpose() {
     rm -rf build
     mkdir build && cd build
 
-    cp -R ${HOME}/library/openpose/3rdparty/caffe/include/caffe/* ${HOME}/library/openpose/3rdparty/caffe/build/include/caffe/
+    cd ../..
+    # pwd = openpose
 
     echo -e "\t${YELLOW}cmake openpose takes quite a long time , with downloading some of the packages${NC}"
     cmake -D Caffe_INCLUDE_DIRS:PATH="${HOME}/library/openpose/3rdparty/caffe/build/include" \
@@ -90,7 +91,7 @@ __config_openpose() {
     echo export PYTHONPATH=/usr/local/python/:$PYTHONPATH >> .bashrc
     source .bashrc
 
-    check=$(python3 ${WORKING_DIR}/openposeConfirm.py)
+    check=$(python3 ${WORKING_DIR}/openposeConfirm.py 2>&1)
     if [[ -z ${output} ]]; then
         echo -e "\t${GREEN}openpose installed properly${NC}"
     else

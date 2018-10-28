@@ -59,7 +59,7 @@ __config_caffe() {
     if [[ -d "caffe" ]]; then
         echo -e "\t${GREEN}git clone caffe successfully${NC}"
     else
-        git clone https://github.com/CMU-Perceptual-Computing-Lab/caffe
+        git clone https://github.com/CMU-Perceptual-Computing-Lab/caffe &>> ${WORKING_DIR}/log.txt
         if [[ -d "caffe" ]]; then
             echo -e "\t${GREEN}git clone caffe successfully${NC}"
         else
@@ -69,18 +69,26 @@ __config_caffe() {
     fi
 
     cd ${HOME}/library/caffe
-    cp Makefile.config.Ubuntu16_cuda8.example Makefile.config
-    sed -i 's/# USE_CUDNN := 1/USE_CUDNN := 1/' Makefile.config
-    sed -i 's/# OPENCV_VERSION := 3/OPENCV_VERSION := 3/' Makefile.config
-    sed -i 's/# WITH_PYTHON_LAYER := 1/WITH_PYTHON_LAYER := 1/' Makefile.config
-    sed -i 's#INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include#INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include /usr/include/hdf5/serial#' Makefile.config
-    sed -i 's#LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib#LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/hdf5/serial#' Makefile.config
+    # cp Makefile.config.Ubuntu16_cuda8.example Makefile.config
+    # sed -i 's/# USE_CUDNN := 1/USE_CUDNN := 1/' Makefile.config
+    # sed -i 's/# USE_OPENCV := 0/USE_OPENCV := 1/' Makefile.config
+    # sed -i 's/# OPENCV_VERSION := 3/OPENCV_VERSION := 3/' Makefile.config
+    # sed -i 's/# WITH_PYTHON_LAYER := 1/WITH_PYTHON_LAYER := 1/' Makefile.config
+    # sed -i 's#INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include#INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include /usr/include/hdf5/serial#' Makefile.config
+    # sed -i 's#LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib#LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/hdf5/serial#' Makefile.config
+    #
+    # sed -i 's#NVCCFLAGS +=-ccbin=$(CXX) -Xcompiler-fPIC $(COMMON_FLAGS)#NVCCFLAGS += -D_FORCE_INLINES -ccbin=$(CXX) -Xcompiler -fPIC $(COMMON_FLAGS)#' Makefile
+    #
+    # sudo sed -i 's$#error-- unsupported GNU version! gcc versions later than 4.9 are not supported!$//#error-- unsupported GNU version! gcc versions later than 4.9 are not supported!$' /usr/local/cuda/include/host_config.h
 
-    sed -i 's#NVCCFLAGS +=-ccbin=$(CXX) -Xcompiler-fPIC $(COMMON_FLAGS)#NVCCFLAGS += -D_FORCE_INLINES -ccbin=$(CXX) -Xcompiler -fPIC $(COMMON_FLAGS)#' Makefile
+    mkdir build
+    cd build
+    cmake ..
 
-    sed -i 's$#error-- unsupported GNU version! gcc versions later than 4.9 are not supported!$//#error-- unsupported GNU version! gcc versions later than 4.9 are not supported!$' /usr/local/cuda/include/host_config.h
-
-    gnome-terminal --disable-factory --tab -e "bash -c \"make all -j`nproc` | tee -a ${WORKING_DIR}/log.txt; make runtest -j`nproc` | tee -a ${WORKING_DIR}/log.txt;\""
+    gnome-terminal --disable-factory --tab -e "bash -c \"make all -j`nproc` | tee -a ${WORKING_DIR}/log.txt;make runtest -j`nproc` | tee -a ${WORKING_DIR}/log.txt;sleep 10s;\""
+    # pwd = library/caffe/build
+    cp include/caffe/proto/* ../include/caffe
+    cp -R ../include/caffe/* /include/caffe
 
     echo -e "\t${GREEN}caffe installed successfully${NC}"
 

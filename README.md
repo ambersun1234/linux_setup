@@ -43,3 +43,5 @@ package="NO"
 cd linux_setup
 bash ./setup.sh
 ```
+### License
+This project is licensed under GNU General Public License v3.0 License - see the [LICENSE](https://github.com/ambersun1234/linux_setup/blob/master/LICENSE) file for detail

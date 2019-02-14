@@ -86,9 +86,14 @@ __config_caffe() {
     cmake ..
 
     gnome-terminal --disable-factory --tab -e "bash -c \"make all -j`nproc` | tee -a ${WORKING_DIR}/log.txt;make runtest -j`nproc` | tee -a ${WORKING_DIR}/log.txt;sleep 10s;\""
-    # pwd = library/caffe/build
-    cp include/caffe/proto/* ../include/caffe
-    cp -R ../include/caffe/* /include/caffe
+	cd ..
+    # pwd = library/caffe/
+	# generate caffe.pb.h , reference https://github.com/muupan/dqn-in-the-caffe/issues/3
+	protoc build/src/proto/caffe.proto --cpp_out=.
+	mkdir include/caffe/proto
+	cp build/src/caffe/proto/caffe.pb.h include/caffe/proto
+    cp build/include/caffe/proto/* /include/caffe
+    cp -R build/include/caffe/* /include/caffe
 
     echo -e "\t${GREEN}caffe installed successfully${NC}"
 

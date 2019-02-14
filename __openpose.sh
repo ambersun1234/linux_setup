@@ -63,17 +63,14 @@ __config_openpose() {
     fi
 
     # copy caffe to openpose
-    cp -R caffe/ openpose/3rdparty
+    cp -R caffe/* openpose/3rdparty/caffe/.
 
     cd openpose
     rm -rf build
     mkdir build && cd build
 
-    cd ../..
-    # pwd = openpose
-
     echo -e "\t${YELLOW}cmake openpose takes quite a long time , with downloading some of the packages${NC}"
-    cmake -D Caffe_INCLUDE_DIRS:PATH="${HOME}/library/openpose/3rdparty/caffe/build/include" \
+    cmake -D Caffe_INCLUDE_DIRS:PATH="${HOME}/library/openpose/3rdparty/caffe/include" \
           -D BUILD_PYTHON:BOOL="1" \
           -D BUILD_CAFFE:BOOL="0" \
           -D Caffe_LIBS:FILEPATH="${HOME}/library/openpose/3rdparty/caffe/build/lib/libcaffe.so" .. &>> ${WORKING_DIR}/log.txt
